@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6200EE;
+      --primary-dark: #5000c9;
+      --secondary: #03DAC6;
+      --accent: #FF4081;
+      --warning: #FF9800;
+      --success: #4CAF50;
+      --error: #F44336;
+      --background: #121212;
+      --card-bg: #1E1E1E;
+      --card-bg-hover: #2a2a2a;
+      --text-primary: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-disabled: rgba(255, 255, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.12);
+      --animation-duration: 0.3s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+      overflow: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      max-width: 450px;
+      margin: 0 auto;
+      position: relative;
+      height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 450px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, var(--background), #090909);
+    }
+
+    /* Header Styles */
+    .header {
+      padding: 3rem 1rem 1rem;
+      background-color: var(--background);
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-name {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-name h1 {
+      font-size: 1.75rem;
+      letter-spacing: 1px;
+    }
+
+    .app-name span:first-child {
+      color: var(--primary);
+    }
+
+    .app-name span:last-child {
+      color: var(--secondary);
+      margin-left: 4px;
+    }
+
+    .pro-badge {
+      background-color: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+    }
+
+    .app-version {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: var(--text-primary);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    .icon-btn:hover, .icon-btn:active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--card-bg);
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      margin-top: 0.75rem;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--success);
+      margin-right: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .status-dot.offline {
+      background-color: var(--error);
+    }
+
+    .status-text {
+      font-size: 0.85rem;
+    }
+
+    .game-chip {
+      background-color: var(--background);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .active-mods-count {
+      display: flex;
+      align-items: center;
+    }
+
+    .active-mods-count span:first-child {
+      margin-right: 4px;
+      font-weight: 500;
+    }
+
+    .active-mods-count span:last-child {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    /* Decorations */
+    .header::before, .header::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .header::before {
+      top: -20px;
+      right: -20px;
+      width: 150px;
+      height: 150px;
+      background-color: var(--primary);
+      opacity: 0.1;
+    }
+
+    .header::after {
+      bottom: -40px;
+      left: -40px;
+      width: 120px;
+      height: 120px;
+      background-color: var(--secondary);
+      opacity: 0.1;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem 1rem 5rem;
+      position: relative;
+    }
+
+    /* APK Generator Card */
+    .apk-generator-card {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      padding: 1px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .apk-generator-content {
+      background-color: var(--card-bg);
+      border-radius: 11px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .apk-generator-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .apk-generator-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+
+    .apk-generator-text h3 {
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+
+    .apk-generator-text p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Section Styles */
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+    }
+
+    .section-action {
+      color: var(--secondary);
+      font-size: 0.85rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .quick-action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .quick-action-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: none;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .quick-action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .quick-action-btn.glowing {
+      animation: glow 1.5s infinite alternate;
+    }
+
+    .quick-action-btn i {
+      font-size: 1.5rem;
+    }
+
+    .quick-action-label {
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    /* Active Mods */
+    .active-mods-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mod-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .mod-card:active {
+      transform: scale(0.98);
+    }
+
+    .mod-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .mod-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .mod-icon {
+      font-size: 1.25rem;
+      margin-right: 12px;
+    }
+
+    .mod-details h4 {
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .mod-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Slider Styles */
+    .mod-slider {
+      margin-top: 12px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      cursor: pointer;
+      border: 2px solid var(--background);
+    }
+
+    /* Toggle Switch */
+    .toggle-container {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 24px;
+    }
+
+    .toggle-input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    .toggle-input:checked + .toggle-slider {
+      background-color: var(--primary);
+    }
+
+    .toggle-input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Mod Categories */
+    .mod-categories {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .category-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .category-card:active {
+      transform: scale(0.98);
+    }
+
+    .category-card::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      bottom: -50px;
+      right: -50px;
+      opacity: 0.1;
+    }
+
+    .category-combat::after {
+      background-color: var(--primary);
+    }
+
+    .category-visual::after {
+      background-color: var(--secondary);
+    }
+
+    .category-movement::after {
+      background-color: var(--accent);
+    }
+
+    .category-utility::after {
+      background-color: var(--warning);
+    }
+
+    .category-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .category-info h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .category-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .category-count {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: white;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--background);
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid var(--border);
+      z-index: 100;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 32px;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .nav-icon {
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+    }
+
+    .nav-notification {
+      position: absolute;
+      top: 6px;
+      right: calc(50% - 18px);
+      background-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(98, 0, 238, 0.4);
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .fab:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(98, 0, 238, 0.4);
+    }
+
+    .fab i {
+      font-size: 1.5rem;
+    }
+
+    /* Modals and Dialogs */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-container {
+      background-color: var(--card-bg);
+      width: 90%;
+      max-width: 400px;
+      border-radius: 16px;
+      padding: 1.25rem;
+      position: relative;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .modal-overlay.active .modal-container {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .modal-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--card-bg-hover);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      margin-bottom: 2px;
+    }
+
+    .modal-subtitle {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .modal-badge {
+      background-color: var(--success);
+      color: white;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-right: 8px;
+    }
+
+    .modal-version {
+      color: var(--text-secondary);
+    }
+
+    .modal-content {
+      margin-bottom: 1rem;
+    }
+
+    .modal-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .modal-form-group {
+      margin-bottom: 1rem;
+    }
+
+    .modal-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .modal-input, .modal-select {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+    }
+
+    .modal-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 16px;
+      padding-right: 32px;
+    }
+
+    .modal-option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-option-label {
+      font-size: 0.85rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+    }
+
+    .modal-button-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .modal-button-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .modal-button-secondary {
+      background-color: var(--card-bg-hover);
+      color: var(--text-primary);
+    }
+
+    .modal-progress {
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    .progress-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    /* Toasts */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background-color: var(--card-bg);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      width: 90%;
+      max-width: 320px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: all;
+    }
+
+    .toast.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--error);
+    }
+
+    .toast.info {
+      border-left: 4px solid var(--primary);
+    }
+
+    .toast-icon {
+      margin-right: 12px;
+      font-size: 1.25rem;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .toast-message {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 5px rgba(98, 0, 238, 0.5);
+      }
+      to {
+        box-shadow: 0 0 20px rgba(98, 0, 238, 0.8);
+      }
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Scale in animation */
+    @keyframes scale-in {
+      0% {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Slide in animation */
+    @keyframes slide-in {
+      0% {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Fade in animation */
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Apply animations to elements */
+    .header {
+      animation: slide-in 0.4s ease-out;
+    }
+
+    .apk-generator-card {
+      animation: scale-in 0.5s ease-out;
+    }
+
+    .section {
+      animation: fade-in 0.6s ease-out;
+    }
+
+    .quick-action-item {
+      animation: scale-in 0.5s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .quick-action-item:nth-child(1) { animation-delay: 0.1s; }
+    .quick-action-item:nth-child(2) { animation-delay: 0.2s; }
+    .quick-action-item:nth-child(3) { animation-delay: 0.3s; }
+    .quick-action-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .mod-card {
+      animation: slide-in 0.5s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .mod-card:nth-child(1) { animation-delay: 0.2s; }
+    .mod-card:nth-child(2) { animation-delay: 0.3s; }
+
+    .category-card {
+      animation: scale-in 0.5s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .category-card:nth-child(1) { animation-delay: 0.3s; }
+    .category-card:nth-child(2) { animation-delay: 0.4s; }
+    .category-card:nth-child(3) { animation-delay: 0.5s; }
+    .category-card:nth-child(4) { animation-delay: 0.6s; }
+
+    .fab {
+      animation: scale-in 0.5s 0.7s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .bottom-nav {
+      animation: slide-in 0.5s 0.5s ease-out;
+      animation-fill-mode: backwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-title">
+          <div>
+            <div class="app-name">
+              <h1><span>MOD</span><span>MENU</span></h1>
+              <div class="pro-badge">PRO</div>
+            </div>
+            <div class="app-version">v2.5.1 - Premium Edition</div>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" id="settingsBtn">
+              <i class="ri-settings-4-line"></i>
+            </button>
+            <button class="icon-btn" id="profileBtn">
+              <i class="ri-user-line"></i>
+            </button>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-indicator">
+            <div class="status-dot"></div>
+            <div class="status-text">Connected</div>
+          </div>
+          <div class="game-chip">PUBG Mobile</div>
+          <div class="active-mods-count">
+            <span>5</span>
+            <span>active mods</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- APK Generator Card -->
+      <div class="apk-generator-card" id="apkGeneratorCard">
+        <div class="apk-generator-content">
+          <div class="apk-generator-info">
+            <div class="apk-generator-icon">
+              <i class="ri-android-line"></i>
+            </div>
+            <div class="apk-generator-text">
+              <h3>Generate APK</h3>
+              <p>Create custom mod menu for your device</p>
+            </div>
+          </div>
+          <i class="ri-arrow-right-line" style="color: var(--primary)"></i>
+        </div>
+      </div>
+
+      <!-- Quick Actions Section -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Quick Actions</h2>
+          <button class="section-action" id="customizeBtn">Customize</button>
+        </div>
+        <div class="quick-actions">
+          <div class="quick-action-item">
+            <button class="quick-action-btn" data-mod-id="1" data-mod-name="Aimbot">
+              <i class="ri-aim-line" style="color: var(--primary)"></i>
+            </button>
+            <span class="quick-action-label">Aimbot</span>
+          </div>
+          <div class="quick-action-item">
+            <button class="quick-action-btn glowing" data-mod-id="2" data-mod-name="ESP">
+              <i class="ri-radar-line" style="color: var(--accent)"></i>
+            </button>
+            <span class="quick-action-label">ESP</span>
+          </div>
+          <div class="quick-action-item">
+            <button class="quick-action-btn" data-mod-id="3" data-mod-name="Speed">
+              <i class="ri-run-line" style="color: var(--secondary)"></i>
+            </button>
+            <span class="quick-action-label">Speed</span>
+          </div>
+          <div class="quick-action-item">
+            <button class="quick-action-btn" data-mod-id="4" data-mod-name="Fly Mode">
+              <i class="ri-rocket-line" style="color: var(--warning)"></i>
+            </button>
+            <span class="quick-action-label">Fly Mode</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Mods Section -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Active Mods</h2>
+          <button class="section-action" id="disableAllBtn">Disable All</button>
+        </div>
+        <div class="active-mods-list">
+          <div class="mod-card" data-mod-id="1">
+            <div class="mod-header">
+              <div class="mod-info">
+                <i class="mod-icon ri-aim-line" style="color: var(--primary)"></i>
+                <div class="mod-details">
+                  <h4>Auto Headshot</h4>
+                  <p class="mod-description">Instant headshots with any weapon</p>
+                </div>
+              </div>
+              <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="mod-slider">
+              <div class="slider-header">
+                <span>Power</span>
+                <span id="powerValue1">80%</span>
+              </div>
+              <input type="range" min="0" max="100" value="80" class="slider" id="powerSlider1">
+            </div>
+          </div>
+          <div class="mod-card" data-mod-id="2">
+            <div class="mod-header">
+              <div class="mod-info">
+                <i class="mod-icon ri-radar-line" style="color: var(--accent)"></i>
+                <div class="mod-details">
+                  <h4>Norecoil</h4>
+                  <p class="mod-description">See all players through Recoil</p>
+                </div>
+              </div>
+              <label class="toggle-container">
+                <input type="checkbox" class="toggle-input" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="mod-slider">
+              <div class="slider-header">
+                <span>Range</span>
+                <span id="rangeValue2">500m</span>
+              </div>
+              <input type="range" min="0" max="100" value="70" class="slider" id="rangeSlider2">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mod Categories Section -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Mod Categories</h2>
+        </div>
+        <div class="mod-categories">
+          <div class="category-card category-combat" data-category-id="1">
+            <i class="category-icon ri-sword-line" style="color: var(--primary)"></i>
+            <div class="category-info">
+              <h4>Combat</h4>
+              <p class="category-description">Aimbot, No recoil, Damage+</p>
+            </div>
+            <span class="category-count" style="background-color: var(--primary)">8</span>
+          </div>
+          <div class="category-card category-visual" data-category-id="2">
+            <i class="category-icon ri-eye-line" style="color: var(--secondary)"></i>
+            <div class="category-info">
+              <h4>Visuals</h4>
+              <p class="category-description">ESP, Wireframe, Radar</p>
+            </div>
+            <span class="category-count" style="background-color: var(--secondary)">6</span>
+          </div>
+          <div class="category-card category-movement" data-category-id="3">
+            <i class="category-icon ri-run-line" style="color: var(--accent)"></i>
+            <div class="category-info">
+              <h4>Movement</h4>
+              <p class="category-description">Speed hack, Jump+, Fly</p>
+            </div>
+            <span class="category-count" style="background-color: var(--accent)">5</span>
+          </div>
+          <div class="category-card category-utility" data-category-id="4">
+            <i class="category-icon ri-settings-line" style="color: var(--warning)"></i>
+            <div class="category-info">
+              <h4>Utilities</h4>
+              <p class="category-description">Fast loot, Auto-heal, Anti-ban</p>
+            </div>
+            <span class="category-count" style="background-color: var(--warning)">7</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="addModFab">
+      <i class="ri-add-line"></i>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <div class="nav-item active">
+        <i class="nav-icon ri-dashboard-line"></i>
+        <span class="nav-label">Dashboard</span>
+      </div>
+      <div class="nav-item">
+        <i class="nav-icon ri-gamepad-line"></i>
+        <span class="nav-label">Games</span>
+      </div>
+      <div class="nav-item">
+        <i class="nav-icon ri-apps-line"></i>
+        <span class="nav-label">Mods</span>
+      </div>
+      <div class="nav-item">
+        <i class="nav-icon ri-download-line"></i>
+        <span class="nav-label">Downloads</span>
+        <span class="nav-notification">2</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Modals -->
+  <!-- APK Generator Modal -->
+  <div class="modal-overlay" id="apkGeneratorModal">
+    <div class="modal-container">
+      <button class="modal-close" id="closeApkGenerator">
+        <i class="ri-close-line"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon" style="color: var(--primary)">
+          <i class="ri-android-line"></i>
+        </div>
+        <div>
+          <h3 class="modal-title">APK Generator</h3>
+          <p class="modal-subtitle">Create your custom mod menu</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="modal-form-group">
+          <label for="appName">App Name</label>
+          <input type="text" id="appName" class="modal-input" value="Android Mod Menu" placeholder="Enter app name">
+        </div>
+        <div class="modal-form-group">
+          <label for="packageName">Package Name</label>
+          <input type="text" id="packageName" class="modal-input" value="com.modmenu.android" placeholder="com.example.modmenu">
+        </div>
+        <div class="modal-form-group">
+          <label for="targetGame">Target Game</label>
+          <select id="targetGame" class="modal-select">
+            <option value="pubg">PUBG Mobile</option>
+            <option value="freefire">Free Fire</option>
+            <option value="codm">Call of Duty Mobile</option>
+            <option value="mlbb">Mobile Legends</option>
+            <option value="fortnite">Fortnite Mobile</option>
+          </select>
+        </div>
+        <div class="modal-progress" id="generationProgress" style="display: none;">
+          <div class="progress-status">
+            <span id="progressStatus">Generating APK...</span>
+            <span id="progressPercentage">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-button modal-button-primary" id="generateApkBtn">Generate APK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mod Info Modal -->
+  <div class="modal-overlay" id="modInfoModal">
+    <div class="modal-container">
+      <button class="modal-close" id="closeModInfo">
+        <i class="ri-close-line"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon" id="modInfoIcon">
+          <i class="ri-aim-line"></i>
+        </div>
+        <div>
+          <h3 class="modal-title" id="modInfoTitle">Auto Headshot</h3>
+          <div class="modal-subtitle">
+            <span class="modal-badge" id="modInfoStatus">Active</span>
+            <span class="modal-version">v1.2.3</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-content">
+        <p class="modal-description" id="modInfoDescription">Instant headshots with any weapon</p>
+        
+        <div class="modal-form-group">
+          <label>Power Level</label>
+          <div class="slider-header">
+            <span>Power</span>
+            <span id="modInfoPowerValue">80%</span>
+          </div>
+          <input type="range" min="0" max="100" value="80" class="slider" id="modInfoPowerSlider">
+        </div>
+        
+        <div class="modal-form-row">
+          <div class="modal-form-group">
+            <label for="detectionRisk">Detection Risk</label>
+            <select id="detectionRisk" class="modal-select">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="modal-form-group">
+            <label for="targetPriority">Target Priority</label>
+            <select id="targetPriority" class="modal-select">
+              <option value="nearest">Nearest</option>
+              <option value="health" selected>Lowest Health</option>
+              <option value="threat">Highest Threat</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="modal-option-row">
+          <span class="modal-option-label">Auto-activate on game launch</span>
+          <label class="toggle-container">
+            <input type="checkbox" class="toggle-input" id="autoActivate">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-button modal-button-primary" id="saveModSettings">Save Settings</button>
+        <button class="modal-button modal-button-secondary" id="shareModBtn">
+          <i class="ri-share-line"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // DOM Elements
+    const apkGeneratorCard = document.getElementById('apkGeneratorCard');
+    const apkGeneratorModal = document.getElementById('apkGeneratorModal');
+    const closeApkGenerator = document.getElementById('closeApkGenerator');
+    const generateApkBtn = document.getElementById('generateApkBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressStatus = document.getElementById('progressStatus');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const generationProgress = document.getElementById('generationProgress');
+    
+    const modInfoModal = document.getElementById('modInfoModal');
+    const closeModInfo = document.getElementById('closeModInfo');
+    const saveModSettings = document.getElementById('saveModSettings');
+    const modInfoIcon = document.getElementById('modInfoIcon');
+    const modInfoTitle = document.getElementById('modInfoTitle');
+    const modInfoDescription = document.getElementById('modInfoDescription');
+    const modInfoStatus = document.getElementById('modInfoStatus');
+    const modInfoPowerSlider = document.getElementById('modInfoPowerSlider');
+    const modInfoPowerValue = document.getElementById('modInfoPowerValue');
+    const autoActivate = document.getElementById('autoActivate');
+    
+    const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+    const modCards = document.querySelectorAll('.mod-card');
+    const toggleInputs = document.querySelectorAll('.toggle-input');
+    const sliders = document.querySelectorAll('.slider');
+    const addModFab = document.getElementById('addModFab');
+    const disableAllBtn = document.getElementById('disableAllBtn');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const profileBtn = document.getElementById('profileBtn');
+    const customizeBtn = document.getElementById('customizeBtn');
+    const navItems = document.querySelectorAll('.nav-item');
+    const categoryCards = document.querySelectorAll('.category-card');
+    const shareModBtn = document.getElementById('shareModBtn');
+    
+    const toastContainer = document.getElementById('toastContainer');
+    
+    // Current active mod for modal
+    let currentModId = null;
+    
+    // Add ripple effect to buttons
+    const addRippleEffect = (element) => {
+      element.addEventListener('click', (e) => {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        element.appendChild(ripple);
+        
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+        
+        setTimeout(() => {
+          if (ripple && ripple.parentNode) {
+            ripple.parentNode.removeChild(ripple);
+          }
+        }, 600);
+      });
+    };
+    
+    // Initialize ripple effects
+    const initRippleEffects = () => {
+      const buttons = document.querySelectorAll('.quick-action-btn, .fab, .icon-btn, .category-card, .mod-card, .apk-generator-card, .modal-button, .nav-item');
+      buttons.forEach(button => {
+        addRippleEffect(button);
+      });
+    };
+    
+    // Show toast message
+    const showToast = (title, message, type = 'info', duration = 3000) => {
+      const toast = document.createElement('div');
+      toast.classList.add('toast');
+      toast.classList.add(type);
+      
+      let iconClass = 'ri-information-line';
+      if (type === 'success') iconClass = 'ri-check-line';
+      if (type === 'error') iconClass = 'ri-error-warning-line';
+      
+      toast.innerHTML = `
+        <i class="toast-icon ${iconClass}"></i>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close"><i class="ri-close-line"></i></button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Force reflow to enable animation
+      void toast.offsetWidth;
+      
+      toast.classList.add('active');
+      
+      const closeToast = () => {
+        toast.classList.remove('active');
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 300);
+      };
+      
+      toast.querySelector('.toast-close').addEventListener('click', closeToast);
+      
+      setTimeout(closeToast, duration);
+    };
+    
+    // Open a modal
+    const openModal = (modal) => {
+      modal.classList.add('active');
+    };
+    
+    // Close a modal
+    const closeModal = (modal) => {
+      modal.classList.remove('active');
+    };
+    
+    // Open the mod info modal with mod details
+    const openModInfoModal = (modId) => {
+      currentModId = modId;
+      
+      // Set default values
+      modInfoPowerSlider.value = 80;
+      modInfoPowerValue.textContent = '80%';
+      autoActivate.checked = false;
+      
+      // Update modal info based on mod ID
+      if (modId === '1') {
+        modInfoIcon.innerHTML = '<i class="ri-aim-line" style="color: var(--primary)"></i>';
+        modInfoTitle.textContent = 'Auto Headshot';
+        modInfoDescription.textContent = 'Instant headshots with any weapon';
+        modInfoStatus.textContent = 'Active';
+        modInfoPowerSlider.value = 80;
+        modInfoPowerValue.textContent = '80%';
+      } else if (modId === '2') {
+        modInfoIcon.innerHTML = '<i class="ri-radar-line" style="color: var(--accent)"></i>';
+        modInfoTitle.textContent = 'ESP Radar';
+        modInfoDescription.textContent = 'See all players through walls';
+        modInfoStatus.textContent = 'Active';
+        modInfoPowerSlider.value = 70;
+        modInfoPowerValue.textContent = '70%';
+      } else if (modId === '3') {
+        modInfoIcon.innerHTML = '<i class="ri-run-line" style="color: var(--secondary)"></i>';
+        modInfoTitle.textContent = 'Speed Hack';
+        modInfoDescription.textContent = 'Increase movement speed';
+        modInfoStatus.textContent = 'Inactive';
+        modInfoPowerSlider.value = 50;
+        modInfoPowerValue.textContent = '50%';
+      } else if (modId === '4') {
+        modInfoIcon.innerHTML = '<i class="ri-rocket-line" style="color: var(--warning)"></i>';
+        modInfoTitle.textContent = 'Fly Mode';
+        modInfoDescription.textContent = 'Fly around the map freely';
+        modInfoStatus.textContent = 'Inactive';
+        modInfoPowerSlider.value = 60;
+        modInfoPowerValue.textContent = '60%';
+      }
+      
+      openModal(modInfoModal);
+    };
+    
+    // Generate APK with progress animation
+    const generateApk = () => {
+      generationProgress.style.display = 'block';
+      generateApkBtn.textContent = 'Generating...';
+      generateApkBtn.disabled = true;
+      
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 5;
+        progressFill.style.width = `${progress}%`;
+        progressPercentage.textContent = `${progress}%`;
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          progressStatus.textContent = 'APK Generated!';
+          generateApkBtn.textContent = 'Download APK';
+          generateApkBtn.disabled = false;
+          
+          // Change button action to download
+          generateApkBtn.removeEventListener('click', generateApk);
+          generateApkBtn.addEventListener('click', downloadApk);
+          
+          showToast('APK Generated Successfully', 'Your mod menu APK is ready to download!', 'success');
+        }
+      }, 200);
+    };
+    
+    // Download the generated APK
+    const downloadApk = () => {
+      const appName = document.getElementById('appName').value;
+      const packageName = document.getElementById('packageName').value;
+      
+      showToast('APK Downloaded', 'Install the APK file on your Android device', 'success');
+      
+      // Close the modal after a delay
+      setTimeout(() => {
+        closeModal(apkGeneratorModal);
+        
+        // Reset the form and button
+        generationProgress.style.display = 'none';
+        progressFill.style.width = '0%';
+        generateApkBtn.textContent = 'Generate APK';
+        generateApkBtn.disabled = false;
+        
+        // Reset button action back to generate
+        generateApkBtn.removeEventListener('click', downloadApk);
+        generateApkBtn.addEventListener('click', generateApk);
+      }, 1500);
+    };
+    
+    // Toggle mod active state
+    const toggleMod = (modId, isActive) => {
+      const status = isActive ? 'activated' : 'deactivated';
+      let modName = 'Mod';
+      
+      // Get mod name based on ID
+      if (modId === '1') modName = 'Auto Headshot';
+      else if (modId === '2') modName = 'ESP Radar';
+      else if (modId === '3') modName = 'Speed Hack';
+      else if (modId === '4') modName = 'Fly Mode';
+      
+      showToast(
+        isActive ? `${modName} Enabled` : `${modName} Disabled`,
+        isActive ? 'Mod has been successfully activated' : 'Mod has been successfully deactivated',
+        isActive ? 'success' : 'info'
+      );
+    };
+    
+    // Disable all mods
+    const disableAllMods = () => {
+      toggleInputs.forEach(toggle => {
+        toggle.checked = false;
+      });
+      
+      showToast('All Mods Disabled', 'All mods have been successfully deactivated', 'info');
+    };
+    
+    // Save mod settings
+    const saveModSettings = () => {
+      const powerValue = modInfoPowerSlider.value;
+      const isAutoActivate = autoActivate.checked;
+      
+      showToast(
+        'Settings Saved',
+        `${modInfoTitle.textContent} settings have been updated`,
+        'success'
+      );
+      
+      // Close the modal
+      closeModal(modInfoModal);
+    };
+    
+    // Event Listeners
+    // APK Generator
+    apkGeneratorCard.addEventListener('click', () => openModal(apkGeneratorModal));
+    closeApkGenerator.addEventListener('click', () => closeModal(apkGeneratorModal));
+    generateApkBtn.addEventListener('click', generateApk);
+    
+    // Mod Info Modal
+    closeModInfo.addEventListener('click', () => closeModal(modInfoModal));
+    saveModSettings.addEventListener('click', saveModSettings);
+    
+    // Quick Action Buttons
+    quickActionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modId = btn.getAttribute('data-mod-id');
+        openModInfoModal(modId);
+      });
+    });
+    
+    // Mod Cards
+    modCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const modId = card.getAttribute('data-mod-id');
+        openModInfoModal(modId);
+      });
+    });
+    
+    // Category Cards
+    categoryCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const categoryId = card.getAttribute('data-category-id');
+        showToast('Category Selected', `Browsing ${card.querySelector('h4').textContent} mods`, 'info');
+      });
+    });
+    
+    // Toggle Inputs
+    toggleInputs.forEach(toggle => {
+      toggle.addEventListener('change', (e) => {
+        e.stopPropagation();
+        const card = toggle.closest('.mod-card');
+        if (card) {
+          const modId = card.getAttribute('data-mod-id');
+          toggleMod(modId, toggle.checked);
+        }
+      });
+    });
+    
+    // Sliders
+    sliders.forEach(slider => {
+      const updateValue = () => {
+        const sliderId = slider.getAttribute('id');
+        const valueId = sliderId.replace('Slider', 'Value');
+        const valueElement = document.getElementById(valueId);
+        
+        if (sliderId === 'rangeSlider2') {
+          const rangeValue = Math.floor(5 * slider.value);
+          valueElement.textContent = `${rangeValue}m`;
+        } else {
+          valueElement.textContent = `${slider.value}%`;
+        }
+      };
+      
+      slider.addEventListener('input', updateValue);
+    });
+    
+    // Mod Info Power Slider
+    modInfoPowerSlider.addEventListener('input', () => {
+      modInfoPowerValue.textContent = `${modInfoPowerSlider.value}%`;
+    });
+    
+    // Other Buttons
+    addModFab.addEventListener('click', () => {
+      showToast('Search Mods', 'Searching for new mods...', 'info');
+    });
+    
+    disableAllBtn.addEventListener('click', disableAllMods);
+    
+    settingsBtn.addEventListener('click', () => {
+      showToast('Settings', 'Opening settings menu...', 'info');
+    });
+    
+    profileBtn.addEventListener('click', () => {
+      showToast('User Profile', 'Opening user profile...', 'info');
+    });
+    
+    customizeBtn.addEventListener('click', () => {
+      showToast('Customize', 'Opening quick actions customization...', 'info');
+    });
+    
+    shareModBtn.addEventListener('click', () => {
+      showToast('Share Mod', `Sharing ${modInfoTitle.textContent} mod settings...`, 'info');
+    });
+    
+    // Navigation
+    navItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Show toast for navigation
+        const pages = ['Dashboard', 'Games', 'Mods', 'Downloads'];
+        showToast('Navigation', `Navigating to ${pages[index]}`, 'info');
+      });
+    });
+    
+    // Initialize
+    initRippleEffects();
+    
+    // Show welcome toast on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        showToast('Welcome to ModMenu Pro', 'Your ultimate game modding experience', 'success', 5000);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
